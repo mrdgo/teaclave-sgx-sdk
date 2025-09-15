@@ -41,5 +41,6 @@
   "target-pointer-width": "64",
   "target-endian": "little",
   "target-family": "unix",
+  "target-pointer-width": "64",
   "vendor": "teaclave"
 }

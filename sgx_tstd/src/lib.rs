@@ -58,6 +58,7 @@
 
 //
 // Language features:
+#![feature(exposed_provenance)]
 #![feature(alloc_error_handler)]
 #![feature(allocator_internals)]
 #![feature(allow_internal_unsafe)]
@@ -141,7 +142,6 @@
 #![feature(cfg_eval)]
 #![feature(concat_bytes)]
 #![feature(const_format_args)]
-#![feature(core_panic)]
 #![feature(custom_test_frameworks)]
 #![feature(edition_panic)]
 #![feature(format_args_nl)]
