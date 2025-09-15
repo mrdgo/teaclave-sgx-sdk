@@ -58,7 +58,6 @@
 
 //
 // Language features:
-#![feature(exposed_provenance)]
 #![feature(alloc_error_handler)]
 #![feature(allocator_internals)]
 #![feature(allow_internal_unsafe)]
