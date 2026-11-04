@@ -84,7 +84,7 @@ fn test_buffered_reader_read_buf() {
     let mut reader = BufReader::with_capacity(2, inner);
 
     let buf: &mut [_] = &mut [MaybeUninit::uninit(); 3];
-    let mut buf: BorrowedBuf<'_> = buf.into();
+    let mut buf: BorrowedBuf<'_, u8> = buf.into();
 
     reader.read_buf(buf.unfilled()).unwrap();
 
@@ -92,7 +92,7 @@ fn test_buffered_reader_read_buf() {
     assert_eq!(reader.buffer(), []);
 
     let buf: &mut [_] = &mut [MaybeUninit::uninit(); 2];
-    let mut buf: BorrowedBuf<'_> = buf.into();
+    let mut buf: BorrowedBuf<'_, u8> = buf.into();
 
     reader.read_buf(buf.unfilled()).unwrap();
 
@@ -100,7 +100,7 @@ fn test_buffered_reader_read_buf() {
     assert_eq!(reader.buffer(), []);
 
     let buf: &mut [_] = &mut [MaybeUninit::uninit(); 1];
-    let mut buf: BorrowedBuf<'_> = buf.into();
+    let mut buf: BorrowedBuf<'_, u8> = buf.into();
 
     reader.read_buf(buf.unfilled()).unwrap();
 
@@ -108,7 +108,7 @@ fn test_buffered_reader_read_buf() {
     assert_eq!(reader.buffer(), [3]);
 
     let buf: &mut [_] = &mut [MaybeUninit::uninit(); 3];
-    let mut buf: BorrowedBuf<'_> = buf.into();
+    let mut buf: BorrowedBuf<'_, u8> = buf.into();
 
     reader.read_buf(buf.unfilled()).unwrap();
 
@@ -1076,11 +1076,11 @@ fn bufreader_full_initialize() {
     }
     let mut reader = BufReader::new(OneByteReader);
     // Nothing is initialized yet.
-    assert_eq!(reader.initialized(), 0);
+    assert!(!reader.initialized());
 
     let buf = reader.fill_buf().unwrap();
     // We read one byte...
     assert_eq!(buf.len(), 1);
     // But we initialized the whole buffer!
-    assert_eq!(reader.initialized(), reader.capacity());
+    assert!(reader.initialized());
 }

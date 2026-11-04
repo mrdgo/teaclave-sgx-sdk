@@ -61,9 +61,9 @@ impl FileDesc {
         cvt_ocall(unsafe { libc::pread64(self.as_raw_fd(), buf, offset as _) })
     }
 
-    pub fn read_buf(&self, mut cursor: BorrowedCursor<'_>) -> io::Result<()> {
+    pub fn read_buf(&self, mut cursor: BorrowedCursor<'_, u8>) -> io::Result<()> {
         let ret = cvt_ocall(unsafe {
-            libc::read(self.as_raw_fd(), MaybeUninit::slice_assume_init_mut(cursor.as_mut()))
+            libc::read(self.as_raw_fd(), cursor.as_mut().assume_init_mut())
         })?;
 
         // Safety: `ret` bytes were written to the initialized portion of the buffer
@@ -150,7 +150,7 @@ impl<'a> Read for &'a FileDesc {
         (**self).read(buf)
     }
 
-    fn read_buf(&mut self, cursor: BorrowedCursor<'_>) -> io::Result<()> {
+    fn read_buf(&mut self, cursor: BorrowedCursor<'_, u8>) -> io::Result<()> {
         (**self).read_buf(cursor)
     }
 
