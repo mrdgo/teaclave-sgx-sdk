@@ -25,15 +25,21 @@ use core::fmt;
 use core::mem;
 use core::ops::{Deref, DerefMut};
 use core::ptr;
-use core::ptr::{NonNull, Unique};
+use core::ptr::NonNull;
 
 pub use crate::alignalloc::AlignReq;
 
 pub struct AlignBox<T> {
-    ptr: Unique<T>,
+    // `core::ptr::Unique` is no longer available outside the standard
+    // library, so a `NonNull` is used with the same ownership semantics.
+    ptr: NonNull<T>,
     align_layout: Layout,
     origin_layout: Layout,
 }
+
+// `AlignBox<T>` owns its `T` like `Box<T>` does.
+unsafe impl<T: Send> Send for AlignBox<T> {}
+unsafe impl<T: Sync> Sync for AlignBox<T> {}
 
 impl<T> AlignBox<T> {
     /// Gets a raw pointer to the start of the allocation. Note that this is
@@ -114,7 +120,7 @@ impl<T: Clone> Clone for AlignBox<T> {
             );
         }
         AlignBox {
-            ptr: Unique::new(ptr.cast::<T>().as_ptr()).unwrap(),
+            ptr: ptr.cast::<T>(),
             align_layout: self.align_layout,
             origin_layout: self.origin_layout,
         }
@@ -137,7 +143,7 @@ impl<T: Clone> Clone for AlignBox<T> {
                 );
                 self.dealloc_buffer();
             }
-            self.ptr = Unique::new(ptr.cast::<T>().as_ptr()).unwrap();
+            self.ptr = ptr.cast::<T>();
         } else {
             (**self).clone_from(&(**source));
         }
@@ -150,7 +156,7 @@ impl<T> AlignBox<T> {
     unsafe fn dealloc_buffer(&mut self) {
         let elem_size = mem::size_of::<T>();
         if elem_size != 0 {
-            AlignAlloc.dealloc(NonNull::from(self.ptr).cast(), self.origin_layout)
+            AlignAlloc.dealloc(self.ptr.cast(), self.origin_layout)
         }
     }
 }
@@ -210,7 +216,7 @@ impl<T> AlignBox<T> {
         };
 
         Some(AlignBox {
-            ptr: Unique::new(ptr.cast::<T>().as_ptr()).unwrap(),
+            ptr: ptr.cast::<T>(),
             align_layout: align_layout.layout,
             origin_layout: layout,
         })

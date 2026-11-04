@@ -20,7 +20,6 @@ use core::mem::ManuallyDrop;
 use core::num::NonZeroUsize;
 use core::ops::{Deref, DerefMut};
 use core::ptr::NonNull;
-use core::ptr::Unique;
 use sgx_types::error::{SgxResult, SgxStatus};
 
 cfg_if! {
@@ -33,10 +32,14 @@ cfg_if! {
 
 #[derive(Debug)]
 pub struct OcBuffer {
-    buf: Unique<[u8]>,
+    // `core::ptr::Unique` is no longer available outside the standard
+    // library, so a `NonNull` is used with the same ownership semantics.
+    buf: NonNull<[u8]>,
 }
 
 impl !Send for OcBuffer {}
+// `Unique<[u8]>` was `Sync`; keep that for `NonNull<[u8]>`.
+unsafe impl Sync for OcBuffer {}
 
 impl OcBuffer {
     #[inline]
@@ -52,7 +55,7 @@ impl OcBuffer {
             .allocate(layout)
             .map_err(|_| SgxStatus::Unexpected)?;
         Ok(OcBuffer {
-            buf: unsafe { Unique::from(buf.as_mut()) },
+            buf: unsafe { NonNull::from(buf.as_mut()) },
         })
     }
 
@@ -76,7 +79,7 @@ impl OcBuffer {
     #[inline]
     pub unsafe fn from_raw(mut ptr: NonNull<[u8]>) -> OcBuffer {
         OcBuffer {
-            buf: Unique::from(ptr.as_mut()),
+            buf: NonNull::from(ptr.as_mut()),
         }
     }
 

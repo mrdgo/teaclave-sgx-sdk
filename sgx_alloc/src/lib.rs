@@ -30,7 +30,6 @@
 #![feature(alloc_layout_extra)]
 #![feature(core_intrinsics)]
 #![feature(dropck_eyepatch)]
-#![feature(ptr_internals)]
 #![feature(slice_ptr_get)]
 
 extern crate alloc;

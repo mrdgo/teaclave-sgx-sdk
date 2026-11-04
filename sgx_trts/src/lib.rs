@@ -26,7 +26,6 @@
 #![feature(min_specialization)]
 #![feature(negative_impls)]
 #![feature(never_type)]
-#![feature(ptr_internals)]
 #![feature(thread_local)]
 #![cfg_attr(feature = "sim", feature(unchecked_math))]
 #![allow(clippy::missing_safety_doc)]

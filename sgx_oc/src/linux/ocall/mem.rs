@@ -23,13 +23,18 @@ use core::num::NonZeroUsize;
 use core::ops::{Deref, DerefMut};
 use core::ptr;
 use core::ptr::NonNull;
-use core::ptr::Unique;
 use sgx_trts::trts::is_within_host;
 
 #[derive(Debug)]
 pub struct HeapBuffer {
-    buf: Unique<[u8]>,
+    // `core::ptr::Unique` is no longer available outside the standard
+    // library, so a `NonNull` is used with the same ownership semantics.
+    buf: NonNull<[u8]>,
 }
+
+// `Unique<[u8]>` was `Send + Sync`; keep that for `NonNull<[u8]>`.
+unsafe impl Send for HeapBuffer {}
+unsafe impl Sync for HeapBuffer {}
 
 impl HeapBuffer {
     #[inline]
@@ -42,7 +47,7 @@ impl HeapBuffer {
         let layout = Layout::from_size_align(len.get(), align.get()).map_err(|_| eos!(EINVAL))?;
         let mut buf = HostAlloc.allocate(layout).map_err(|_| eos!(ENOMEM))?;
         Ok(HeapBuffer {
-            buf: unsafe { Unique::from(buf.as_mut()) },
+            buf: unsafe { NonNull::from(buf.as_mut()) },
         })
     }
 
@@ -58,7 +63,7 @@ impl HeapBuffer {
             .allocate_zeroed(layout)
             .map_err(|_| eos!(ENOMEM))?;
         Ok(HeapBuffer {
-            buf: unsafe { Unique::from(buf.as_mut()) },
+            buf: unsafe { NonNull::from(buf.as_mut()) },
         })
     }
 
@@ -70,7 +75,7 @@ impl HeapBuffer {
     #[inline]
     pub unsafe fn from_raw(mut ptr: NonNull<[u8]>) -> HeapBuffer {
         HeapBuffer {
-            buf: Unique::from(ptr.as_mut()),
+            buf: NonNull::from(ptr.as_mut()),
         }
     }
 }

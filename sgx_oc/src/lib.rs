@@ -21,7 +21,6 @@
 #![feature(error_in_core)]
 #![feature(const_extern_fn)]
 #![feature(negative_impls)]
-#![feature(ptr_internals)]
 #![feature(slice_index_methods)]
 #![allow(clippy::missing_safety_doc)]
 #![allow(clippy::upper_case_acronyms)]
