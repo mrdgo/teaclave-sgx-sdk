@@ -23,7 +23,6 @@
 #![feature(const_trait_impl)]
 #![feature(core_intrinsics)]
 #![feature(extract_if)]
-#![feature(maybe_uninit_uninit_array)]
 #![feature(min_specialization)]
 #![feature(negative_impls)]
 #![feature(never_type)]

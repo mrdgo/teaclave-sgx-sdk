@@ -234,7 +234,7 @@ extern "C" fn internal_handle(info: &mut ExceptionInfo) {
         }
 
         let mut handlers: [MaybeUninit<ExceptionHandler>; MAX_REGISTER_COUNT] =
-            MaybeUninit::uninit_array();
+            [const { MaybeUninit::uninit() }; MAX_REGISTER_COUNT];
 
         // let mut handlers: [ExceptionHandler; MAX_REGISTER_COUNT] = unsafe { mem::zeroed() };
         let mut len = 0_usize;
