@@ -58,12 +58,12 @@
 
 //
 // Language features:
+#![feature(exposed_provenance)]
 #![feature(alloc_error_handler)]
 #![feature(allocator_internals)]
 #![feature(allow_internal_unsafe)]
 #![feature(allow_internal_unstable)]
 #![feature(c_unwind)]
-#![feature(concat_idents)]
 #![feature(const_mut_refs)]
 #![feature(const_trait_impl)]
 #![feature(decl_macro)]
@@ -86,7 +86,9 @@
 // Library features (core):
 // tidy-alphabetical-start
 #![feature(char_internals)]
+#![feature(borrowed_buf_init)]
 #![feature(core_intrinsics)]
+#![feature(core_io)]
 #![feature(core_io_borrowed_buf)]
 #![feature(duration_constants)]
 #![feature(error_generic_member_access)]
@@ -94,6 +96,8 @@
 #![feature(error_iter)]
 #![feature(exact_size_is_empty)]
 #![feature(exclusive_wrapper)]
+#![feature(fmt_internals)]
+#![feature(formatting_options)]
 #![feature(extend_one)]
 #![feature(float_minimum_maximum)]
 #![feature(hasher_prefixfree_extras)]
@@ -101,14 +105,12 @@
 #![feature(ip)]
 #![feature(ip_in_core)]
 #![feature(maybe_uninit_slice)]
-#![feature(maybe_uninit_uninit_array)]
 #![feature(maybe_uninit_write_slice)]
 #![feature(panic_can_unwind)]
 #![feature(panic_info_message)]
 #![feature(panic_internals)]
 #![feature(prelude_2024)]
 #![feature(ptr_as_uninit)]
-#![feature(raw_os_nonzero)]
 #![feature(slice_internals)]
 #![feature(std_internals)]
 #![feature(str_internals)]
@@ -141,7 +143,6 @@
 #![feature(cfg_eval)]
 #![feature(concat_bytes)]
 #![feature(const_format_args)]
-#![feature(core_panic)]
 #![feature(custom_test_frameworks)]
 #![feature(edition_panic)]
 #![feature(format_args_nl)]
@@ -155,7 +156,6 @@
 //
 // Only for const-ness:
 // tidy-alphabetical-start
-#![feature(const_hash)]
 // tidy-alphabetical-end
 //
 
@@ -322,7 +322,7 @@ pub use core::{
 // Re-export built-in macros defined through core.
 #[allow(deprecated)]
 pub use core::{
-    assert, assert_matches, cfg, column, compile_error, concat, concat_idents, const_format_args,
+    assert, assert_matches, cfg, column, compile_error, concat, const_format_args,
     env, file, format_args, format_args_nl, include, include_bytes, include_str, line, log_syntax,
     module_path, option_env, stringify, trace_macros,
 };
