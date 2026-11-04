@@ -179,7 +179,11 @@ impl Futex {
     }
 
     fn load_val(&self) -> u32 {
-        unsafe { intrinsics::atomic_load_seqcst(self.0 as *const u32) }
+        unsafe {
+            intrinsics::atomic_load::<u32, { intrinsics::AtomicOrdering::SeqCst }, false>(
+                self.0 as *const u32,
+            )
+        }
     }
 
     fn addr(&self) -> usize {
