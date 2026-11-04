@@ -171,7 +171,7 @@
 
 pub use alloc_crate::sync::{Arc, Weak};
 pub use core::sync::atomic;
-pub use core::sync::Exclusive;
+pub use core::sync::SyncView;
 
 pub use self::barrier::{Barrier, BarrierWaitResult};
 pub use self::condvar::{Condvar, WaitTimeoutResult};

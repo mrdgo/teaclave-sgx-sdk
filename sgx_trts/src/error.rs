@@ -36,5 +36,5 @@ pub fn set_errno(e: i32) {
 #[no_mangle]
 pub extern "C" fn abort() -> ! {
     state::set_state(State::Crashed);
-    core::intrinsics::abort()
+    core::intrinsics::abort_immediate()
 }

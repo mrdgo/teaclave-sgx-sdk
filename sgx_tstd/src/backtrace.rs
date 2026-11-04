@@ -399,6 +399,7 @@ impl fmt::Display for Backtrace {
 type LazyResolve = impl (FnOnce() -> Capture) + Send + Sync + UnwindSafe;
 
 #[allow(clippy::infallible_destructuring_match)]
+#[define_opaque(LazyResolve)]
 fn lazy_resolve(mut capture: Capture) -> LazyResolve {
     move || {
         // Use the global backtrace lock to synchronize this as it's a

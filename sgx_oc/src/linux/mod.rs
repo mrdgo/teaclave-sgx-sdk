@@ -91,7 +91,8 @@ f! {
     pub fn CPU_COUNT_S(size: usize, cpuset: *const cpu_set_t) -> c_int {
         let mut s: u32 = 0;
         let size_of_mask = mem::size_of_val(&(*cpuset).bits[0]);
-        for i in (*cpuset).bits[..(size / size_of_mask)].iter() {
+        let bits = &(*cpuset).bits;
+        for i in bits[..(size / size_of_mask)].iter() {
             s += i.count_ones();
         };
         s as c_int
