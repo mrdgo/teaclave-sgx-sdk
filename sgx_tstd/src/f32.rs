@@ -58,7 +58,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn floor(self) -> f32 {
-        unsafe { intrinsics::floorf32(self) }
+        unsafe { intrinsics::floor(self) }
     }
 
     /// Returns the smallest integer greater than or equal to `self`.
@@ -76,7 +76,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn ceil(self) -> f32 {
-        unsafe { intrinsics::ceilf32(self) }
+        unsafe { intrinsics::ceil(self) }
     }
 
     /// Returns the nearest integer to `self`. If a value is half-way between two
@@ -101,7 +101,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn round(self) -> f32 {
-        unsafe { intrinsics::roundf32(self) }
+        unsafe { intrinsics::round(self) }
     }
 
     /// Returns the nearest integer to a number. Rounds half-way cases to the number
@@ -126,7 +126,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn round_ties_even(self) -> f32 {
-        unsafe { intrinsics::rintf32(self) }
+        intrinsics::round_ties_even(self)
     }
 
     /// Returns the integer part of `self`.
@@ -147,7 +147,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn trunc(self) -> f32 {
-        unsafe { intrinsics::truncf32(self) }
+        unsafe { intrinsics::trunc(self) }
     }
 
     /// Returns the fractional part of `self`.
@@ -168,29 +168,6 @@ impl f32 {
     #[inline]
     pub fn fract(self) -> f32 {
         self - self.trunc()
-    }
-
-    /// Computes the absolute value of `self`.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// let x = 3.5_f32;
-    /// let y = -3.5_f32;
-    ///
-    /// let abs_difference_x = (x.abs() - x).abs();
-    /// let abs_difference_y = (y.abs() - (-y)).abs();
-    ///
-    /// assert!(abs_difference_x <= f32::EPSILON);
-    /// assert!(abs_difference_y <= f32::EPSILON);
-    ///
-    /// assert!(f32::NAN.abs().is_nan());
-    /// ```
-    #[rustc_allow_incoherent_impl]
-    #[must_use = "method returns a new number and does not mutate the original value"]
-    #[inline]
-    pub fn abs(self) -> f32 {
-        unsafe { intrinsics::fabsf32(self) }
     }
 
     /// Returns a number that represents the sign of `self`.
@@ -214,34 +191,6 @@ impl f32 {
     #[inline]
     pub fn signum(self) -> f32 {
         if self.is_nan() { Self::NAN } else { 1.0_f32.copysign(self) }
-    }
-
-    /// Returns a number composed of the magnitude of `self` and the sign of
-    /// `sign`.
-    ///
-    /// Equal to `self` if the sign of `self` and `sign` are the same, otherwise
-    /// equal to `-self`. If `self` is a NaN, then a NaN with the sign bit of
-    /// `sign` is returned. Note, however, that conserving the sign bit on NaN
-    /// across arithmetical operations is not generally guaranteed.
-    /// See [explanation of NaN as a special value](primitive@f32) for more info.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// let f = 3.5_f32;
-    ///
-    /// assert_eq!(f.copysign(0.42), 3.5_f32);
-    /// assert_eq!(f.copysign(-0.42), -3.5_f32);
-    /// assert_eq!((-f).copysign(0.42), 3.5_f32);
-    /// assert_eq!((-f).copysign(-0.42), -3.5_f32);
-    ///
-    /// assert!(f32::NAN.copysign(1.0).is_nan());
-    /// ```
-    #[rustc_allow_incoherent_impl]
-    #[must_use = "method returns a new number and does not mutate the original value"]
-    #[inline]
-    pub fn copysign(self, sign: f32) -> f32 {
-        unsafe { intrinsics::copysignf32(self, sign) }
     }
 
     /// Fused multiply-add. Computes `(self * a) + b` with only one rounding
@@ -268,7 +217,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn mul_add(self, a: f32, b: f32) -> f32 {
-        unsafe { intrinsics::fmaf32(self, a, b) }
+        unsafe { intrinsics::fma(self, a, b) }
     }
 
     /// Calculates Euclidean division, the matching method for `rem_euclid`.
@@ -348,7 +297,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn powi(self, n: i32) -> f32 {
-        unsafe { intrinsics::powif32(self, n) }
+        unsafe { intrinsics::powi(self, n) }
     }
 
     /// Raises a number to a floating point power.
@@ -365,7 +314,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn powf(self, n: f32) -> f32 {
-        unsafe { intrinsics::powf32(self, n) }
+        unsafe { intrinsics::powf(self, n) }
     }
 
     /// Returns the square root of a number.
@@ -389,7 +338,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn sqrt(self) -> f32 {
-        unsafe { intrinsics::sqrtf32(self) }
+        unsafe { intrinsics::sqrt(self) }
     }
 
     /// Returns `e^(self)`, (the exponential function).
@@ -410,7 +359,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn exp(self) -> f32 {
-        unsafe { intrinsics::expf32(self) }
+        unsafe { intrinsics::exp(self) }
     }
 
     /// Returns `2^(self)`.
@@ -429,7 +378,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn exp2(self) -> f32 {
-        unsafe { intrinsics::exp2f32(self) }
+        unsafe { intrinsics::exp2(self) }
     }
 
     /// Returns the natural logarithm of the number.
@@ -450,7 +399,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn ln(self) -> f32 {
-        unsafe { intrinsics::logf32(self) }
+        unsafe { intrinsics::log(self) }
     }
 
     /// Returns the logarithm of the number with respect to an arbitrary base.
@@ -492,7 +441,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn log2(self) -> f32 {
-        unsafe { intrinsics::log2f32(self) }
+        unsafe { intrinsics::log2(self) }
     }
 
     /// Returns the base 10 logarithm of the number.
@@ -511,7 +460,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn log10(self) -> f32 {
-        unsafe { intrinsics::log10f32(self) }
+        unsafe { intrinsics::log10(self) }
     }
 
     /// The positive difference of two numbers.
@@ -605,7 +554,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn sin(self) -> f32 {
-        unsafe { intrinsics::sinf32(self) }
+        unsafe { intrinsics::sin(self) }
     }
 
     /// Computes the cosine of a number (in radians).
@@ -623,7 +572,7 @@ impl f32 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn cos(self) -> f32 {
-        unsafe { intrinsics::cosf32(self) }
+        unsafe { intrinsics::cos(self) }
     }
 
     /// Computes the tangent of a number (in radians).
