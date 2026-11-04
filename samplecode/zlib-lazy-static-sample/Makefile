@@ -100,7 +100,7 @@ endif
 ifeq ($(BUILD_STD), cargo)
 	Rust_Build_Std := $(Rust_Build_Flags) -Zbuild-std=core,alloc
 	Rust_Std_Features := --features untrusted_time
-	Rust_Target_Flags := --target $(Rust_Target_Path)/$(Rust_Build_Target).json
+	Rust_Target_Flags := --target $(Rust_Target_Path)/$(Rust_Build_Target).json -Zjson-target-spec
 	Rust_Sysroot_Path := $(CURDIR)/sysroot
 	Rust_Sysroot_Flags := RUSTFLAGS="--sysroot $(Rust_Sysroot_Path)"
 else
@@ -178,7 +178,7 @@ ifeq ($(BUILD_STD), cargo)
 
 	@rm -rf $(Rust_Sysroot_Path)
 	@mkdir -p $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
-	@cp -r $(Rust_Target_Path)/std/target/$(Rust_Build_Target)/$(Rust_Build_Out)/deps/* $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib
+	@find $(Rust_Target_Path)/std/target/$(Rust_Build_Target)/$(Rust_Build_Out) \( -name '*.rlib' -o -name '*.rmeta' \) -exec cp {} $(Rust_Sysroot_Path)/lib/rustlib/$(Rust_Build_Target)/lib/ \;
 
 	@cd enclave && $(Rust_Sysroot_Flags) cargo build $(Rust_Target_Flags) $(RustEnclave_Build_Flags)
 else
