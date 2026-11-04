@@ -18,46 +18,55 @@
 use crate::arch::Align64;
 use core::arch::global_asm;
 
-global_asm!(include_str!("cet.S"));
-global_asm!(include_str!("macro.S"));
-
+// All assembly files are emitted through a single `global_asm!` invocation.
+// The assembler macros and `.equ` constants defined in `cet.S` and `macro.S`
+// are used by the other files, and recent compilers no longer guarantee that
+// separate `global_asm!` items are emitted in source order, so the files must
+// be concatenated into one template to keep the definitions first.
 cfg_if! {
     if #[cfg(feature = "sim")] {
-        global_asm!(include_str!("../inst/sim/td.S"), options(att_syntax));
-        global_asm!(include_str!("../inst/sim/enclu.S"), options(att_syntax));
+        global_asm!(
+            include_str!("cet.S"),
+            include_str!("macro.S"),
+            include_str!("../inst/sim/td.S"),
+            include_str!("../inst/sim/enclu.S"),
+            include_str!("../inst/sim/lowlib.S"),
+            include_str!("metadata.S"),
+            include_str!("thunk.S"),
+            include_str!("../inst/sim/xsave_mask.S"),
+            include_str!("xsave.S"),
+            include_str!("pic.S"),
+            options(att_syntax)
+        );
     } else if #[cfg(feature = "hyper")] {
-        global_asm!(include_str!("../inst/hyper/td.S"), options(att_syntax));
-        global_asm!(include_str!("../inst/hyper/enclu.S"), options(att_syntax));
+        global_asm!(
+            include_str!("cet.S"),
+            include_str!("macro.S"),
+            include_str!("../inst/hyper/td.S"),
+            include_str!("../inst/hyper/enclu.S"),
+            include_str!("metadata.S"),
+            include_str!("thunk.S"),
+            include_str!("../inst/hyper/xsave_mask.S"),
+            include_str!("xsave.S"),
+            include_str!("pic.S"),
+            options(att_syntax)
+        );
     } else {
-        global_asm!(include_str!("../inst/hw/td.S"), options(att_syntax));
-        global_asm!(include_str!("../inst/hw/enclu.S"), options(att_syntax));
+        global_asm!(
+            include_str!("cet.S"),
+            include_str!("macro.S"),
+            include_str!("../inst/hw/td.S"),
+            include_str!("../inst/hw/enclu.S"),
+            include_str!("metadata.S"),
+            include_str!("thunk.S"),
+            include_str!("../inst/hw/xsave_mask.S"),
+            include_str!("../inst/hw/everifyreport.S"),
+            include_str!("xsave.S"),
+            include_str!("pic.S"),
+            options(att_syntax)
+        );
     }
 }
-
-#[cfg(feature = "sim")]
-global_asm!(include_str!("../inst/sim/lowlib.S"), options(att_syntax));
-
-global_asm!(include_str!("metadata.S"), options(att_syntax));
-global_asm!(include_str!("thunk.S"), options(att_syntax));
-
-cfg_if! {
-    if #[cfg(feature = "sim")] {
-        global_asm!(include_str!("../inst/sim/xsave_mask.S"),options(att_syntax));
-    } else if #[cfg(feature = "hyper")] {
-        global_asm!(include_str!("../inst/hyper/xsave_mask.S"), options(att_syntax));
-    } else {
-        global_asm!(include_str!("../inst/hw/xsave_mask.S"), options(att_syntax));
-    }
-}
-
-#[cfg(all(not(feature = "sim"), not(feature = "hyper")))]
-global_asm!(
-    include_str!("../inst/hw/everifyreport.S"),
-    options(att_syntax)
-);
-
-global_asm!(include_str!("xsave.S"), options(att_syntax));
-global_asm!(include_str!("pic.S"), options(att_syntax));
 
 const SYNTHETIC_STATE_SIZE: usize = 512 + 64;
 #[link_section = ".niprod"]
