@@ -41,20 +41,50 @@ pub use crate::option::Option::{self, None, Some};
 #[doc(no_inline)]
 pub use crate::result::Result::{self, Err, Ok};
 
-// Re-exported built-in macros
+// Re-exported built-in macros and traits.
+//
+// Recent compilers no longer inject `#[macro_use] extern crate std;` into
+// dependent crates, so every macro that used to arrive through the
+// `macro_use` prelude must be re-exported from the prelude explicitly
+// (mirroring upstream `std::prelude::v1`).
 #[allow(deprecated)]
 #[doc(no_inline)]
 pub use core::prelude::v1::{
-    assert, cfg, column, compile_error, concat, concat_idents, env, file, format_args,
-    format_args_nl, include, include_bytes, include_str, line, log_syntax, module_path, option_env,
-    stringify, trace_macros, Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd,
+    assert, assert_eq, assert_ne, cfg, column, compile_error, concat, debug_assert, debug_assert_eq,
+    debug_assert_ne, env, file, format_args, include, include_bytes, include_str, line, matches,
+    module_path, option_env, stringify, todo, r#try, unimplemented, unreachable, write,
+    writeln, Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd,
 };
+
+#[doc(no_inline)]
+pub use crate::{
+    dbg, eprint, eprintln, format, is_x86_feature_detected, print, println, thread_local
+};
+
+// These macros need special handling, so that we don't export them *and* the modules of the same
+// name. We only want the macros in the prelude so we shadow the original modules with private
+// modules with the same names.
+mod ambiguous_macros_only {
+    #[allow(hidden_glob_reexports)]
+    mod vec {}
+    #[allow(hidden_glob_reexports)]
+    mod panic {}
+    pub use crate::*;
+}
+#[doc(no_inline)]
+pub use self::ambiguous_macros_only::{vec, panic};
 
 #[doc(no_inline)]
 pub use core::prelude::v1::concat_bytes;
 
-#[allow(deprecated)]
-pub use core::prelude::v1::{RustcDecodable, RustcEncodable};
+#[doc(no_inline)]
+pub use core::prelude::v1::const_format_args;
+
+#[doc(no_inline)]
+pub use core::prelude::v1::log_syntax;
+
+#[doc(no_inline)]
+pub use core::prelude::v1::trace_macros;
 
 // Do not `doc(no_inline)` so that they become doc items on their own
 // (no public module for them to be re-exported from).
