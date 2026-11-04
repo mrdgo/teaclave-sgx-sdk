@@ -19,6 +19,7 @@
 
 use crate::any::Any;
 use crate::collections;
+use crate::fmt;
 use crate::panicking;
 #[cfg(feature = "backtrace")]
 use crate::sync::atomic::{AtomicUsize, Ordering};
@@ -28,7 +29,7 @@ use crate::thread::Result;
 #[doc(hidden)]
 #[allow_internal_unstable(libstd_sys_internals, const_format_args, core_panic, rt)]
 #[cfg_attr(not(test), rustc_diagnostic_item = "std_panic_2015_macro")]
-#[rustc_macro_transparency = "semitransparent"]
+#[rustc_macro_transparency = "semiopaque"]
 pub macro panic_2015 {
     () => ({
         $crate::rt::begin_panic("explicit panic")
@@ -54,9 +55,96 @@ pub use crate::panicking::{set_hook, take_hook};
 
 pub use crate::panicking::update_hook;
 
-pub use core::panic::{Location, PanicInfo};
+pub use core::panic::{AssertUnwindSafe, Location, RefUnwindSafe, UnwindSafe};
 
-pub use core::panic::{AssertUnwindSafe, RefUnwindSafe, UnwindSafe};
+/// A struct providing information about a panic.
+///
+/// `PanicInfo` has been renamed to [`PanicHookInfo`] to avoid confusion with
+/// [`core::panic::PanicInfo`].
+#[deprecated(since = "1.82.0", note = "use `PanicHookInfo` instead")]
+pub type PanicInfo<'a> = PanicHookInfo<'a>;
+
+/// A struct providing information about a panic.
+///
+/// `PanicHookInfo` structure is passed to a panic hook set by the [`set_hook`] function.
+pub struct PanicHookInfo<'a> {
+    payload: &'a (dyn Any + Send),
+    location: &'a Location<'a>,
+    can_unwind: bool,
+    force_no_backtrace: bool,
+}
+
+impl<'a> PanicHookInfo<'a> {
+    #[inline]
+    pub(crate) fn new(
+        location: &'a Location<'a>,
+        payload: &'a (dyn Any + Send),
+        can_unwind: bool,
+        force_no_backtrace: bool,
+    ) -> Self {
+        PanicHookInfo { payload, location, can_unwind, force_no_backtrace }
+    }
+
+    /// Returns the payload associated with the panic.
+    ///
+    /// This will commonly, but not always, be a `&'static str` or [`String`].
+    ///
+    /// [`String`]: ../../std/string/struct.String.html
+    #[must_use]
+    #[inline]
+    pub fn payload(&self) -> &(dyn Any + Send) {
+        self.payload
+    }
+
+    /// Returns the payload associated with the panic, if it is a string.
+    ///
+    /// This returns the payload if it is of type `&'static str` or `String`.
+    #[must_use]
+    #[inline]
+    pub fn payload_as_str(&self) -> Option<&str> {
+        if let Some(s) = self.payload.downcast_ref::<&str>() {
+            Some(s)
+        } else if let Some(s) = self.payload.downcast_ref::<String>() {
+            Some(s)
+        } else {
+            None
+        }
+    }
+
+    /// Returns information about the location from which the panic originated,
+    /// if available.
+    #[must_use]
+    #[inline]
+    pub fn location(&self) -> Option<&Location<'_>> {
+        Some(self.location)
+    }
+
+    /// Returns whether the panic handler is allowed to unwind the stack from
+    /// the point where the panic occurred.
+    #[must_use]
+    #[inline]
+    pub fn can_unwind(&self) -> bool {
+        self.can_unwind
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub fn force_no_backtrace(&self) -> bool {
+        self.force_no_backtrace
+    }
+}
+
+impl fmt::Display for PanicHookInfo<'_> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("panicked at ")?;
+        self.location.fmt(formatter)?;
+        if let Some(payload) = self.payload_as_str() {
+            formatter.write_str(":\n")?;
+            formatter.write_str(payload)?;
+        }
+        Ok(())
+    }
+}
 
 /// Panic the current thread with the given message as the panic payload.
 ///

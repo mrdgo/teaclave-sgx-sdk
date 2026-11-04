@@ -16,10 +16,11 @@
 #![feature(rustc_attrs)]
 #![feature(c_unwind)]
 
+extern crate alloc;
 extern crate sgx_trts;
 
+use alloc::panicking::PanicPayload;
 use core::any::Any;
-use core::panic::PanicPayload;
 
 /// # Safety
 #[rustc_std_internal_symbol]

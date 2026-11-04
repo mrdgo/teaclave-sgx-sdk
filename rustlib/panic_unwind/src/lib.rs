@@ -29,8 +29,8 @@ extern crate alloc;
 extern crate sgx_unwind;
 
 use alloc::boxed::Box;
+use alloc::panicking::PanicPayload;
 use core::any::Any;
-use core::panic::PanicPayload;
 
 #[path = "gcc.rs"]
 mod imp;
@@ -56,7 +56,7 @@ pub unsafe extern "C" fn __rust_panic_cleanup(payload: *mut u8) -> *mut (dyn Any
 // implementation.
 #[rustc_std_internal_symbol]
 pub unsafe fn __rust_start_panic(payload: &mut dyn PanicPayload) -> u32 {
-    let payload = Box::from_raw(payload.take_box());
+    let payload = payload.take_box();
 
     imp::panic(payload)
 }
