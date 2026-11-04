@@ -238,7 +238,7 @@ pub fn set_errno(e: i32) {
 
 macro_rules! bail {
     ($e:expr) => {
-        return Err($e);
+        return Err($e)
     };
 }
 
