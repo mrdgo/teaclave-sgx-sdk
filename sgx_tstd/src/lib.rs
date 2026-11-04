@@ -161,6 +161,10 @@
 
 #![default_lib_allocator]
 
+// The Rust prelude. The compiler resolves the `#[prelude_import]` below
+// eagerly, so the module must be declared before it.
+pub mod prelude;
+
 // Explicitly import the prelude. The compiler uses this same unstable attribute
 // to import the prelude implicitly when building crates that depend on std.
 #[prelude_import]
@@ -200,9 +204,6 @@ mod macros;
 // compiler
 #[macro_use]
 pub mod rt;
-
-// The Rust prelude
-pub mod prelude;
 
 // Public module declarations and re-exports
 pub use alloc_crate::borrow;
