@@ -176,7 +176,7 @@ pub fn handle(tcs: &mut Tcs) -> SgxResult {
 
     let new_sp = sp as *mut u64;
     // prepare the ip for 2nd phrase handling
-    ssa_gpr.rip = internal_handle as usize as u64;
+    ssa_gpr.rip = internal_handle as *const () as usize as u64;
     // new stack for internal_handle_exception
     ssa_gpr.rsp = new_sp as u64;
     // 1st parameter (info) for LINUX32
