@@ -36,3 +36,7 @@ unit_test = ["sgx_test_utils"]
 [dependencies]
 sgx_types = { path = "../sgx_types" }
 sgx_test_utils = { path = "../sgx_tests/utils", optional = true }
+
+[lints.rust]
+# `target_vendor = "teaclave"` comes from rustlib/x86_64-unknown-linux-sgx.json.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_vendor, values("teaclave"))'] }

@@ -41,3 +41,7 @@ rand_core = { version = "0.6", optional = true }
 [build-dependencies]
 sgx_build_helper = { path = "../../sgx_build_helper/build_helper" }
 sgx_download_prebuilt = { path = "../../sgx_build_helper/download_prebuilt" }
+
+[lints.rust]
+# `target_vendor = "teaclave"` comes from rustlib/x86_64-unknown-linux-sgx.json.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_vendor, values("teaclave"))'] }

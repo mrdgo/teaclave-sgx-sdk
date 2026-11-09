@@ -39,3 +39,7 @@ sgx_types = { path = "../../sgx_types" }
 [build-dependencies]
 cc = "1.0"
 sgx_build_helper = { path = "../../sgx_build_helper/build_helper" }
+
+[lints.rust]
+# `target_vendor = "teaclave"` comes from rustlib/x86_64-unknown-linux-sgx.json.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_vendor, values("teaclave"))'] }
