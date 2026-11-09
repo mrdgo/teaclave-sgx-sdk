@@ -15,7 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-pub const MAJOR_VERSION: usize = 2;
-pub const MINOR_VERSION: usize = 17;
-pub const REVISION_VERSION: usize = 101;
+// The Intel SGX SDK version recorded in `g_global_data`. `sgx_sign` refuses to
+// sign an enclave whose recorded SDK version differs from its own, so the
+// build script detects the installed SDK and generates `MAJOR_VERSION`,
+// `MINOR_VERSION` and `REVISION_VERSION` (see `build.rs`).
+include!(concat!(env!("OUT_DIR"), "/sdk_version.rs"));
+
 pub const VERSION_UINT: usize = (MAJOR_VERSION << 32) | (MINOR_VERSION << 16) | REVISION_VERSION;
