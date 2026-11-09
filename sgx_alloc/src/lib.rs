@@ -23,11 +23,10 @@
 //! 2018-06-22 Add liballoc components here
 
 #![no_std]
+#![allow(internal_features)]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
 #![allow(clippy::missing_safety_doc)]
 #![allow(non_camel_case_types)]
-#![feature(allocator_api)]
-#![feature(alloc_layout_extra)]
 #![feature(core_intrinsics)]
 #![feature(dropck_eyepatch)]
 #![feature(slice_ptr_get)]

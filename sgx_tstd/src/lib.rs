@@ -58,30 +58,23 @@
 
 //
 // Language features:
-#![feature(exposed_provenance)]
 #![feature(alloc_error_handler)]
 #![feature(allocator_internals)]
 #![feature(allow_internal_unsafe)]
 #![feature(allow_internal_unstable)]
-#![feature(c_unwind)]
-#![feature(const_mut_refs)]
 #![feature(const_trait_impl)]
 #![feature(decl_macro)]
 #![feature(dropck_eyepatch)]
-#![feature(if_let_guard)]
 #![feature(lang_items)]
-#![feature(let_chains)]
 #![feature(min_specialization)]
 #![feature(must_not_suspend)]
 #![feature(needs_panic_runtime)]
 #![feature(negative_impls)]
-#![feature(never_type)]
 #![feature(prelude_import)]
 #![feature(rustc_attrs)]
 #![feature(thread_local)]
 #![feature(try_blocks)]
 #![feature(type_alias_impl_trait)]
-#![feature(utf8_chunks)]
 //
 // Library features (core):
 // tidy-alphabetical-start
@@ -92,10 +85,8 @@
 #![feature(core_io_borrowed_buf)]
 #![feature(duration_constants)]
 #![feature(error_generic_member_access)]
-#![feature(error_in_core)]
 #![feature(error_iter)]
 #![feature(exact_size_is_empty)]
-#![feature(exclusive_wrapper)]
 #![feature(fmt_internals)]
 #![feature(formatting_options)]
 #![feature(extend_one)]
@@ -103,30 +94,22 @@
 #![feature(hasher_prefixfree_extras)]
 #![feature(hashmap_internals)]
 #![feature(ip)]
-#![feature(ip_in_core)]
-#![feature(maybe_uninit_slice)]
-#![feature(maybe_uninit_write_slice)]
 #![feature(panic_can_unwind)]
-#![feature(panic_info_message)]
 #![feature(panic_internals)]
-#![feature(prelude_2024)]
 #![feature(ptr_as_uninit)]
 #![feature(slice_internals)]
 #![feature(std_internals)]
 #![feature(str_internals)]
-#![feature(strict_provenance)]
 #![feature(type_ascription)]
 // tidy-alphabetical-end
 //
 // Library features (alloc):
 // tidy-alphabetical-start
-#![feature(allocator_api)]
+#![feature(allocator_ext)]
 #![feature(get_mut_unchecked)]
 #![feature(map_try_insert)]
-#![feature(new_uninit)]
 #![feature(slice_concat_trait)]
 #![feature(try_reserve_kind)]
-#![feature(vec_into_raw_parts)]
 // tidy-alphabetical-end
 //
 // Library features (unwind):
@@ -136,9 +119,7 @@
 //
 // Only for re-exporting:
 // tidy-alphabetical-start
-#![feature(assert_matches)]
 #![feature(async_iterator)]
-#![feature(c_variadic)]
 #![feature(cfg_accessible)]
 #![feature(cfg_eval)]
 #![feature(concat_bytes)]
@@ -146,7 +127,6 @@
 #![feature(custom_test_frameworks)]
 #![feature(edition_panic)]
 #![feature(format_args_nl)]
-#![feature(lazy_cell)]
 #![feature(log_syntax)]
 #![feature(test)]
 #![feature(trace_macros)]

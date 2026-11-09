@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#![feature(allocator_api)]
+#![feature(allocator_ext)]
 #![allow(clippy::missing_safety_doc)]
 
 #[cfg(all(feature = "sim", feature = "hyper"))]

@@ -16,6 +16,7 @@
 // under the License.
 
 #![no_std]
+#![allow(internal_features)]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
 #![deny(unused_features)]
 #![feature(const_trait_impl)]
@@ -24,7 +25,6 @@
 #![feature(hashmap_internals)]
 #![feature(linked_list_remove)]
 #![feature(negative_impls)]
-#![feature(never_type)]
 #![allow(dead_code)]
 #![allow(clippy::missing_safety_doc)]
 #![allow(non_camel_case_types)]

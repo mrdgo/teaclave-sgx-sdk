@@ -18,16 +18,14 @@
 //! # Trusted Runtime System
 
 #![no_std]
+#![allow(internal_features)]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
-#![feature(allocator_api)]
+// `Box::try_new_in` is only used by the hardware-mode EDMM paths.
+#![cfg_attr(not(any(feature = "sim", feature = "hyper")), feature(allocator_ext))]
 #![feature(const_trait_impl)]
 #![feature(core_intrinsics)]
-#![feature(extract_if)]
 #![feature(min_specialization)]
 #![feature(negative_impls)]
-#![feature(never_type)]
-#![feature(thread_local)]
-#![cfg_attr(feature = "sim", feature(unchecked_math))]
 #![allow(clippy::missing_safety_doc)]
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]

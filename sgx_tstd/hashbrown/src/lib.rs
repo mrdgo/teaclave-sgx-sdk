@@ -10,18 +10,15 @@
 //! [CppCon talk]: https://www.youtube.com/watch?v=ncHmEUmJZf4
 
 #![no_std]
+#![allow(internal_features)]
 #![cfg_attr(
     feature = "nightly",
     feature(
-        test,
         core_intrinsics,
         dropck_eyepatch,
         min_specialization,
         extend_one,
-        allocator_api,
-        slice_ptr_get,
-        maybe_uninit_array_assume_init,
-        strict_provenance
+        slice_ptr_get
     )
 )]
 #![allow(
@@ -36,7 +33,6 @@
 )]
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
-#![cfg_attr(feature = "nightly", warn(fuzzy_provenance_casts))]
 
 #[cfg(test)]
 #[macro_use]
