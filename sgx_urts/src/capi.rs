@@ -180,7 +180,6 @@ pub unsafe extern "C" fn rsgx_destroy_enclave(eid: EnclaveId) -> SgxStatus {
     }
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn rsgx_get_target_info(
     eid: EnclaveId,
@@ -189,7 +188,6 @@ pub unsafe extern "C" fn rsgx_get_target_info(
     sgx_get_target_info(eid, target_info)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn rsgx_get_metadata(
     path: *const c_char,
@@ -198,7 +196,6 @@ pub unsafe extern "C" fn rsgx_get_metadata(
     sgx_get_metadata(path, metadata)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn rsgx_get_enclave_mode() -> i32 {
     SgxEnclave::mode() as i32

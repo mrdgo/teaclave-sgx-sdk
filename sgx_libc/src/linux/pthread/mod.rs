@@ -178,7 +178,6 @@ pub unsafe extern "C" fn pthread_setspecific(key: pthread_key_t, value: *const c
     }
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_mutex_init(
     mutex: *mut pthread_mutex_t,
@@ -187,31 +186,26 @@ pub unsafe extern "C" fn pthread_mutex_init(
     sgx_thread_mutex_init(mutex, _attr)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_mutex_lock(mutex: *mut pthread_mutex_t) -> c_int {
     sgx_thread_mutex_lock(mutex)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_mutex_trylock(mutex: *mut pthread_mutex_t) -> c_int {
     sgx_thread_mutex_trylock(mutex)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_mutex_unlock(mutex: *mut pthread_mutex_t) -> c_int {
     sgx_thread_mutex_unlock(mutex)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_mutex_destroy(mutex: *mut pthread_mutex_t) -> c_int {
     sgx_thread_mutex_destroy(mutex)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_init(
     cond: *mut pthread_cond_t,
@@ -220,7 +214,6 @@ pub unsafe extern "C" fn pthread_cond_init(
     sgx_thread_cond_init(cond, _attr)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_wait(
     cond: *mut pthread_cond_t,
@@ -229,7 +222,6 @@ pub unsafe extern "C" fn pthread_cond_wait(
     sgx_thread_cond_wait(cond, mutex)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_timedwait(
     cond: *mut pthread_cond_t,
@@ -239,25 +231,21 @@ pub unsafe extern "C" fn pthread_cond_timedwait(
     sgx_thread_cond_timedwait(cond, mutex, timeout)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_signal(cond: *mut pthread_cond_t) -> c_int {
     sgx_thread_cond_signal(cond)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_broadcast(cond: *mut pthread_cond_t) -> c_int {
     sgx_thread_cond_broadcast(cond)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_cond_destroy(cond: *mut pthread_cond_t) -> c_int {
     sgx_thread_cond_destroy(cond)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_rwlock_init(
     rwlock: *mut pthread_rwlock_t,
@@ -271,13 +259,11 @@ pub unsafe extern "C" fn pthread_rwlock_rdlock(rwlock: *mut pthread_rwlock_t) ->
     sgx_thread_rwlock_rdlock(rwlock)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_rwlock_tryrdlock(rwlock: *mut pthread_rwlock_t) -> c_int {
     sgx_thread_rwlock_tryrdlock(rwlock)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_rwlock_wrlock(rwlock: *mut pthread_rwlock_t) -> c_int {
     sgx_thread_rwlock_wrlock(rwlock)
@@ -288,13 +274,11 @@ pub unsafe extern "C" fn pthread_rwlock_trywrlock(rwlock: *mut pthread_rwlock_t)
     sgx_thread_rwlock_trywrlock(rwlock)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_rwlock_unlock(rwlock: *mut pthread_rwlock_t) -> c_int {
     sgx_thread_rwlock_unlock(rwlock)
 }
 
-#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn pthread_rwlock_destroy(rwlock: *mut pthread_rwlock_t) -> c_int {
     sgx_thread_rwlock_destroy(rwlock)
