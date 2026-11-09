@@ -94,7 +94,7 @@ impl GlobalHyper {
     #[inline]
     pub fn get() -> &'static GlobalHyper {
         unsafe {
-            let ptr = &g_global_data_hyper as *const _ as *const GlobalHyper;
+            let ptr = (&raw const g_global_data_hyper) as *const GlobalHyper;
             &*ptr
         }
     }
@@ -102,7 +102,7 @@ impl GlobalHyper {
     #[inline]
     pub fn get_mut() -> &'static mut GlobalHyper {
         unsafe {
-            let ptr = &mut g_global_data_hyper as *mut _ as *mut GlobalHyper;
+            let ptr = (&raw mut g_global_data_hyper) as *mut GlobalHyper;
             &mut *ptr
         }
     }

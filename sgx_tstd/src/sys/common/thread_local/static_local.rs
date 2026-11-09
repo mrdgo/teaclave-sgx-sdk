@@ -37,7 +37,7 @@ pub macro thread_local_inner {
             if !$crate::mem::needs_drop::<$t>() || $crate::thread::tcs_policy() == $crate::thread::TcsPolicy::Bind {
                 #[thread_local]
                 static mut VAL: $t = INIT_EXPR;
-                Ok(&VAL)
+                Ok(&*(&raw const VAL))
             } else {
                 $crate::result::Result::Err($crate::thread::AccessError::new(
                     "If TLS data needs to be destructed, TCS policy must be bound."

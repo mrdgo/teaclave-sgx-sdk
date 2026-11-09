@@ -97,7 +97,7 @@ impl GlobalSim {
     #[inline]
     pub fn get() -> &'static GlobalSim {
         unsafe {
-            let ptr = &g_global_data_sim as *const _ as *const GlobalSim;
+            let ptr = (&raw const g_global_data_sim) as *const GlobalSim;
             &*ptr
         }
     }
@@ -105,7 +105,7 @@ impl GlobalSim {
     #[inline]
     pub fn get_mut() -> &'static mut GlobalSim {
         unsafe {
-            let ptr = &mut g_global_data_sim as *mut _ as *mut GlobalSim;
+            let ptr = (&raw mut g_global_data_sim) as *mut GlobalSim;
             &mut *ptr
         }
     }

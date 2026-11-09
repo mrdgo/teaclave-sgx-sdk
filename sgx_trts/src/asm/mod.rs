@@ -79,9 +79,8 @@ pub static mut SYNTHETIC_STATE: Align64<[u32; SYNTHETIC_STATE_SIZE / 4]> = Align
     0, 0, 0, 0, 0, 2, 0, 2, 0x80000000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]);
 
-#[inline(always)]
 #[no_mangle]
 pub unsafe extern "C" fn get_synthetic_state_ptr(
 ) -> &'static mut Align64<[u32; SYNTHETIC_STATE_SIZE / 4]> {
-    &mut SYNTHETIC_STATE
+    &mut *(&raw mut SYNTHETIC_STATE)
 }

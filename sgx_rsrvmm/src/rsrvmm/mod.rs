@@ -64,7 +64,7 @@ impl RsrvMem {
     pub fn get_or_init() -> OsResult<&'static mut RsrvMem> {
         unsafe {
             RSRV_MEM_INIT.call_once(|| RSRV_MEM = RsrvMem::init().ok());
-            RSRV_MEM.as_mut().ok_or(ENOMEM)
+            (*(&raw mut RSRV_MEM)).as_mut().ok_or(ENOMEM)
         }
     }
 

@@ -19,7 +19,6 @@
 //!
 //! Documentation can be found on the `rt::at_exit` function.
 
-use crate::mem;
 use crate::ptr;
 use crate::sys_common::mutex::StaticMutex;
 
@@ -58,7 +57,7 @@ pub fn cleanup() {
         unsafe {
             let queue = {
                 let _guard = LOCK.lock();
-                mem::replace(&mut QUEUE, if i == ITERS { DONE } else { ptr::null_mut() })
+                ptr::replace(&raw mut QUEUE, if i == ITERS { DONE } else { ptr::null_mut() })
             };
 
             // make sure we're not recursively cleaning up

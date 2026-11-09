@@ -81,7 +81,7 @@ pub fn lock_state() -> State {
             u32,
             { core::intrinsics::AtomicOrdering::SeqCst },
             { core::intrinsics::AtomicOrdering::SeqCst },
-        >(&mut ENCLAVE_STATE, NOT_STARTED, IN_PROGRESS);
+        >(&raw mut ENCLAVE_STATE, NOT_STARTED, IN_PROGRESS);
         state
     };
     match state {

@@ -190,7 +190,7 @@ pub unsafe fn initenv(env: Option<Vec<CString>>) -> OCallResult<()> {
     let _guard = ENV_LOCK.write();
 
     if ENVIRON.load(Ordering::SeqCst).is_null() {
-        let os_env = Box::new(OsEnviron::new(env, &mut environ).map_err(|e| eos!(e))?);
+        let os_env = Box::new(OsEnviron::new(env, &mut *(&raw mut environ)).map_err(|e| eos!(e))?);
         ENVIRON.store(Box::into_raw(os_env), Ordering::SeqCst);
     }
 
@@ -362,7 +362,7 @@ pub unsafe fn initargs(args: Option<Vec<CString>>) -> OCallResult<()> {
 pub static mut environ: *const *const c_char = ptr::null();
 
 static ENV_LOCK: StaticRwLock = StaticRwLock::new();
-static mut ENVIRON: AtomicPtr<OsEnviron> = AtomicPtr::new(ptr::null_mut());
+static ENVIRON: AtomicPtr<OsEnviron> = AtomicPtr::new(ptr::null_mut());
 
 struct OsEnviron<'a> {
     env: Vec<CString>,
@@ -478,7 +478,7 @@ impl<'a> Drop for OsEnviron<'a> {
 }
 
 static ARG_LOCK: StaticRwLock = StaticRwLock::new();
-static mut ARGS: AtomicPtr<OsArgs> = AtomicPtr::new(ptr::null_mut());
+static ARGS: AtomicPtr<OsArgs> = AtomicPtr::new(ptr::null_mut());
 
 struct OsArgs {
     args: Vec<CString>,

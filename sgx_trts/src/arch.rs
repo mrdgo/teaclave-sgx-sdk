@@ -458,7 +458,7 @@ impl Global {
     #[inline]
     pub fn get() -> &'static Global {
         unsafe {
-            let ptr = &g_global_data as *const _ as *const Global;
+            let ptr = (&raw const g_global_data) as *const Global;
             &*ptr
         }
     }

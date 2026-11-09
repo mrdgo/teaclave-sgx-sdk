@@ -293,7 +293,7 @@ fn init_static_stack_guard(tcs: &Tcs) {
 
 pub fn get_stack_guard() -> NonZeroUsize {
     let guard = unsafe {
-        STACK_CHK_GUARD.get_or_init(|| loop {
+        (*(&raw const STACK_CHK_GUARD)).get_or_init(|| loop {
             let r = Rng::new().next_usize();
             if r != 0 {
                 break NonZeroUsize::new(r).unwrap();

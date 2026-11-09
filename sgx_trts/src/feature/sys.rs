@@ -249,12 +249,12 @@ impl SysFeatures {
 
     #[inline]
     pub fn get() -> &'static SysFeatures {
-        unsafe { &SYS_FEATURES }
+        unsafe { &*(&raw const SYS_FEATURES) }
     }
 
     #[inline]
     pub unsafe fn get_mut() -> &'static mut SysFeatures {
-        &mut SYS_FEATURES
+        &mut *(&raw mut SYS_FEATURES)
     }
 
     #[inline]

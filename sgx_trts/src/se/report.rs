@@ -99,7 +99,7 @@ impl AlignReport {
                 REPORT = report;
                 Ok(())
             });
-            &REPORT
+            &*(&raw const REPORT)
         }
     }
 

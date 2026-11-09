@@ -106,7 +106,7 @@ static mut IMAGE: MaybeUninit<Image> = MaybeUninit::uninit();
 
 impl Image {
     pub fn init() {
-        let image = unsafe { IMAGE.assume_init_mut() };
+        let image = unsafe { (*(&raw mut IMAGE)).assume_init_mut() };
         image.image_base = Self::image_base();
         image.image_size = Self::image_size();
         image.elrange_base = Self::elrange_base();
@@ -116,7 +116,7 @@ impl Image {
 
     #[inline]
     pub fn get() -> &'static Image {
-        unsafe { IMAGE.assume_init_ref() }
+        unsafe { (*(&raw const IMAGE)).assume_init_ref() }
     }
 
     #[inline]
@@ -178,16 +178,15 @@ static mut HEAP: Option<Heap> = None;
 impl Heap {
     pub fn get_or_init() -> &'static Heap {
         unsafe {
-            if let Some(ref heap) = HEAP {
-                heap
-            } else {
-                HEAP = Some(Heap {
+            let heap = &raw mut HEAP;
+            if (*heap).is_none() {
+                *heap = Some(Heap {
                     base: Self::base(),
                     size: Self::size(),
                     min_size: Self::min_size(),
                 });
-                HEAP.as_ref().unwrap()
             }
+            (*heap).as_ref().unwrap()
         }
     }
 
@@ -250,17 +249,16 @@ static mut RSRV_MEM: Option<RsrvMem> = None;
 impl RsrvMem {
     pub fn get_or_init() -> &'static RsrvMem {
         unsafe {
-            if let Some(ref rsrvmem) = RSRV_MEM {
-                rsrvmem
-            } else {
-                RSRV_MEM = Some(RsrvMem {
+            let rsrvmem = &raw mut RSRV_MEM;
+            if (*rsrvmem).is_none() {
+                *rsrvmem = Some(RsrvMem {
                     base: Self::base(),
                     size: Self::size(),
                     min_size: Self::min_size(),
                     perm: Self::default_perm(),
                 });
-                RSRV_MEM.as_ref().unwrap()
             }
+            (*rsrvmem).as_ref().unwrap()
         }
     }
 
