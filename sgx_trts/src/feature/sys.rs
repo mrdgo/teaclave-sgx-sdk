@@ -39,6 +39,10 @@ impl_enum! {
         Sdk2_1 = 2,
         Sdk2_2 = 3,
         Sdk2_3 = 4,
+        // Added in Intel SGX SDK/PSW 2.2x (`SDK_VERSION_3_0` in
+        // common/inc/internal/rts.h): urts passes it for enclaves signed by a
+        // current SDK. Without it `SysFeatures::init` fails with Unexpected.
+        Sdk3_0 = 5,
     }
 }
 
