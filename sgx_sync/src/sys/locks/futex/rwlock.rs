@@ -92,7 +92,7 @@ impl RwLock {
     #[inline]
     pub unsafe fn try_read(&self) -> bool {
         self.state
-            .fetch_update(Acquire, Relaxed, |s| {
+            .try_update(Acquire, Relaxed, |s| {
                 is_read_lockable(s).then_some(s + READ_LOCKED)
             })
             .is_ok()
@@ -171,7 +171,7 @@ impl RwLock {
     #[inline]
     pub unsafe fn try_write(&self) -> bool {
         self.state
-            .fetch_update(Acquire, Relaxed, |s| {
+            .try_update(Acquire, Relaxed, |s| {
                 is_unlocked(s).then_some(s + WRITE_LOCKED)
             })
             .is_ok()
