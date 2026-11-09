@@ -26,4 +26,7 @@ pub(crate) use msbuf::MsbufInfo;
 
 pub use ecall::{ecall, ECallIndex, FIRST_ECALL};
 pub use ocall::{ocall, oret, OCallIndex};
-pub use ocalloc::{OcAlloc, OcBuffer};
+pub use ocalloc::OcBuffer;
+// `OcAlloc` is only referenced by the hardware-mode EDMM paths.
+#[cfg(not(any(feature = "sim", feature = "hyper")))]
+pub use ocalloc::OcAlloc;

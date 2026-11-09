@@ -20,7 +20,6 @@ mod tests;
 
 use crate::cmp;
 use crate::io::{self, BorrowedCursor, IoSlice, IoSliceMut, Read};
-use crate::mem::MaybeUninit;
 use crate::os::unix::io::{AsFd, AsRawFd, BorrowedFd, FromRawFd, IntoRawFd, OwnedFd, RawFd};
 use crate::sys::cvt_ocall;
 use crate::sys_common::{AsInner, FromInner, IntoInner};
