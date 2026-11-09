@@ -135,6 +135,10 @@ pub mod rust_2021 {
 
     #[doc(no_inline)]
     pub use core::prelude::rust_2021::*;
+
+    // There are two different panic macros, one in `core` and one in `sgx_tstd`. They are
+    // slightly different. For `sgx_tstd` we explicitly want the one defined here.
+    pub use super::v1::panic;
 }
 
 /// The 2024 version of the prelude of The Rust Standard Library.
@@ -146,4 +150,8 @@ pub mod rust_2024 {
 
     #[doc(no_inline)]
     pub use core::prelude::rust_2024::*;
+
+    // There are two different panic macros, one in `core` and one in `sgx_tstd`. They are
+    // slightly different. For `sgx_tstd` we explicitly want the one defined here.
+    pub use super::v1::panic;
 }
