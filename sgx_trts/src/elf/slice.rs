@@ -42,12 +42,12 @@ impl<T> Clone for FatPtr<T> {
 impl<T> Copy for FatPtr<T> {}
 
 pub trait AsSlice<T> {
-    fn as_slice(&self) -> Slice<T>;
+    fn as_raw_slice(&self) -> Slice<T>;
 }
 
 impl<T> AsSlice<T> for [T] {
     #[inline(always)]
-    fn as_slice(&self) -> Slice<T> {
+    fn as_raw_slice(&self) -> Slice<T> {
         Slice { rust: self }
     }
 }
@@ -139,7 +139,7 @@ impl<T> Slice<T> {
 
     pub fn eq(&self, other: &[T]) -> bool {
         let t_len = self.len();
-        let other = other.as_slice();
+        let other = other.as_raw_slice();
         if t_len != other.len() {
             return false;
         }
@@ -179,15 +179,15 @@ pub unsafe fn from_raw_parts_mut<'a, T>(data: *mut T, len: usize) -> &'a mut [T]
 }
 
 pub fn eq<T>(src: &[T], other: &[T]) -> bool {
-    let t_len = src.as_slice().len();
-    if t_len != other.as_slice().len() {
+    let t_len = src.as_raw_slice().len();
+    if t_len != other.as_raw_slice().len() {
         return false;
     }
 
     unsafe {
         memcmp(
-            src.as_slice().as_ptr() as *const u8,
-            other.as_slice().as_ptr() as *const u8,
+            src.as_raw_slice().as_ptr() as *const u8,
+            other.as_raw_slice().as_ptr() as *const u8,
             mem::size_of::<T>() * t_len,
         )
     }
