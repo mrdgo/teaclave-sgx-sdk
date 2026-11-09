@@ -70,7 +70,7 @@
 //! The `#[global_allocator]` can only be used once in a crate
 //! or its recursive dependencies.
 
-use core::sync::atomic::{AtomicPtr, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicPtr, Ordering};
 use core::{mem, ptr};
 
 #[doc(inline)]
@@ -134,15 +134,24 @@ pub fn take_alloc_error_hook() -> fn(Layout) {
 }
 
 fn default_alloc_error_hook(layout: Layout) {
-    extern "Rust" {
-        // This symbol is emitted by rustc next to __rust_alloc_error_handler.
-        // Its value depends on the -Zoom={panic,abort} compiler option.
-        static __rust_alloc_error_handler_should_panic: u8;
-    }
-
-    #[allow(unused_unsafe)]
-    if unsafe { __rust_alloc_error_handler_should_panic != 0 } {
-        panic!("memory allocation of {} bytes failed", layout.size());
+    // This is the default path taken on OOM. Crucially, it does *not* call any
+    // user-defined code, and therefore users do not have to worry about
+    // allocation failure causing reentrancy issues. That makes it different
+    // from the default `__rdl_alloc_error_handler` defined in alloc (i.e., the
+    // default alloc error handler that is called when there is no
+    // `#[alloc_error_handler]`), which triggers a regular panic and thus can
+    // invoke a user-defined panic hook, executing arbitrary user-defined code.
+    //
+    // rustc no longer provides `__rust_alloc_error_handler_should_panic`, so
+    // the hook always prints and lets `rust_oom` abort, as upstream does.
+    static PREV_ALLOC_FAILURE: AtomicBool = AtomicBool::new(false);
+    if PREV_ALLOC_FAILURE.swap(true, Ordering::Relaxed) {
+        // A previous allocation failure likely means there is not enough
+        // memory left to do anything elaborate here.
+        rtprintpanic!(
+            "memory allocation of {} bytes failed\nskipping further handling to avoid potential recursion\n",
+            layout.size()
+        );
     } else {
         rtprintpanic!("memory allocation of {} bytes failed\n", layout.size());
     }

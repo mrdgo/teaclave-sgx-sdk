@@ -38,9 +38,11 @@ mod imp;
 extern "C" {
     /// Handler in std called when a panic object is dropped outside of
     /// `catch_unwind`.
+    #[rustc_std_internal_symbol]
     fn __rust_drop_panic() -> !;
 
     /// Handler in std called when a foreign exception is caught.
+    #[rustc_std_internal_symbol]
     fn __rust_foreign_exception() -> !;
 }
 
