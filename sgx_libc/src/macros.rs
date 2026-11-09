@@ -132,7 +132,7 @@ macro_rules! f {
         $($body:stmt);*
     })*) => ($(
         #[inline]
-        pub unsafe extern fn $i($($arg: $argty),*) -> $ret {
+        pub unsafe extern "C" fn $i($($arg: $argty),*) -> $ret {
             $($body);*
         }
     )*)
