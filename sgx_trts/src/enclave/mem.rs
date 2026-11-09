@@ -145,7 +145,15 @@ impl Image {
 
     #[inline]
     fn elrange_size() -> usize {
-        arch::Global::get().elrange_size as usize
+        let global_data = arch::Global::get();
+        // The signer only fills `elrange_size` when an ELRANGE is configured;
+        // otherwise (the common case) it is 0 and the enclave range is simply
+        // the image, as in Intel's trts (`get_enclave_size`).
+        if global_data.elrange_size != 0 {
+            global_data.elrange_size as usize
+        } else {
+            global_data.enclave_size
+        }
     }
 
     #[inline]

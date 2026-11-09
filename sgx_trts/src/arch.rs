@@ -309,6 +309,11 @@ impl_enum! {
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
+// Must match `thread_data_t` in common/inc/internal/thread_data.h of the Intel
+// SGX SDK that signs the enclave (the signer emits `g_global_data.td_template`
+// in that layout and urts instantiates it per thread). SDK 2.24 inserted the
+// three `aex_*`/`first_ssa_xsave` words after `last_error` and appended the
+// two AEX-notify entropy fields.
 pub struct Tds {
     pub self_addr: usize,
     pub last_sp: usize,
@@ -319,12 +324,21 @@ pub struct Tds {
     pub flags: usize,
     pub xsave_size: usize,
     pub last_error: usize,
+    /// AEX Notify mitigation handler list (SDK >= 2.24)
+    pub aex_mitigation_list: usize,
+    /// Used to record the aexnotify status last time (SDK >= 2.24)
+    pub aex_notify_flag: usize,
+    /// set by urts, relative to TCS (SDK >= 2.24)
+    pub first_ssa_xsave: usize,
     pub m_next: usize,
     pub tls_addr: usize,
     pub tls_array: usize,
     pub exception_flag: isize,
     pub cxx_thread_info: [usize; 6],
     pub stack_commit: usize,
+    /// SDK >= 2.24
+    pub aex_notify_entropy_cache: u32,
+    pub aex_notify_entropy_remaining: i32,
     #[cfg(feature = "hyper")]
     pub index: usize,
 }
@@ -366,7 +380,13 @@ impl Tds {
 pub const TCS_POLICY_BIND: usize = 0x0000_0000; /* If set, the TCS is bound to the application thread */
 pub const TCS_POLICY_UNBIND: usize = 0x0000_0001;
 
-pub const LAYOUT_ENTRY_NUM: usize = 42;
+// Must match `global_data_t` in common/inc/internal/global_data.h of the Intel
+// SGX SDK that signs the enclave: `sgx_sign` emits a patch of that struct
+// which urts writes over `g_global_data` at load time. SDK 2.24 grew the layout
+// table from 42 to 43 entries and appended `edmm_bk_overhead`; 2.28 appended
+// `fips_on`/`reserved2`. With the 2.17 layout the elrange fields below were
+// read 32 bytes too early and enclave init failed with Unexpected.
+pub const LAYOUT_ENTRY_NUM: usize = 43;
 pub const TCS_TEMPLATE_SIZE: usize = 72;
 
 #[repr(C)]
@@ -389,6 +409,11 @@ pub struct Global {
     pub enclave_image_base: u64,
     pub elrange_start_base: u64,
     pub elrange_size: u64,
+    /// memory overhead used by edmm bookkeeping (SDK >= 2.24)
+    pub edmm_bk_overhead: usize,
+    /// SDK >= 2.28
+    pub fips_on: u32,
+    pub reserved2: u32,
 }
 
 #[repr(C, packed)]
