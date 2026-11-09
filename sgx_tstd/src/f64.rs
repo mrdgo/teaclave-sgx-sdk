@@ -58,7 +58,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn floor(self) -> f64 {
-        unsafe { intrinsics::floor(self) }
+        intrinsics::floor(self)
     }
 
     /// Returns the smallest integer greater than or equal to `self`.
@@ -76,7 +76,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn ceil(self) -> f64 {
-        unsafe { intrinsics::ceil(self) }
+        intrinsics::ceil(self)
     }
 
     /// Returns the nearest integer to `self`. If a value is half-way between two
@@ -101,7 +101,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn round(self) -> f64 {
-        unsafe { intrinsics::round(self) }
+        intrinsics::round(self)
     }
 
     /// Returns the nearest integer to a number. Rounds half-way cases to the number
@@ -147,7 +147,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn trunc(self) -> f64 {
-        unsafe { intrinsics::trunc(self) }
+        intrinsics::trunc(self)
     }
 
     /// Returns the fractional part of `self`.
@@ -217,7 +217,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn mul_add(self, a: f64, b: f64) -> f64 {
-        unsafe { intrinsics::fma(self, a, b) }
+        intrinsics::fma(self, a, b)
     }
 
     /// Calculates Euclidean division, the matching method for `rem_euclid`.
@@ -297,7 +297,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn powi(self, n: i32) -> f64 {
-        unsafe { intrinsics::powi(self, n) }
+        intrinsics::powi(self, n)
     }
 
     /// Raises a number to a floating point power.
@@ -314,7 +314,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn powf(self, n: f64) -> f64 {
-        unsafe { intrinsics::powf(self, n) }
+        intrinsics::powf(self, n)
     }
 
     /// Returns the square root of a number.
@@ -338,7 +338,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn sqrt(self) -> f64 {
-        unsafe { intrinsics::sqrt(self) }
+        intrinsics::sqrt(self)
     }
 
     /// Returns `e^(self)`, (the exponential function).
@@ -359,7 +359,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn exp(self) -> f64 {
-        unsafe { intrinsics::exp(self) }
+        intrinsics::exp(self)
     }
 
     /// Returns `2^(self)`.
@@ -378,7 +378,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn exp2(self) -> f64 {
-        unsafe { intrinsics::exp2(self) }
+        intrinsics::exp2(self)
     }
 
     /// Returns the natural logarithm of the number.
@@ -399,7 +399,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn ln(self) -> f64 {
-        self.log_wrapper(|n| unsafe { intrinsics::log(n) })
+        self.log_wrapper(|n| intrinsics::log(n))
     }
 
     /// Returns the logarithm of the number with respect to an arbitrary base.
@@ -441,7 +441,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn log2(self) -> f64 {
-        self.log_wrapper(|n| unsafe { intrinsics::log2(n) })
+        self.log_wrapper(|n| intrinsics::log2(n))
     }
 
     /// Returns the base 10 logarithm of the number.
@@ -460,7 +460,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn log10(self) -> f64 {
-        self.log_wrapper(|n| unsafe { intrinsics::log10(n) })
+        self.log_wrapper(|n| intrinsics::log10(n))
     }
 
     /// The positive difference of two numbers.
@@ -554,7 +554,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn sin(self) -> f64 {
-        unsafe { intrinsics::sin(self) }
+        intrinsics::sin(self)
     }
 
     /// Computes the cosine of a number (in radians).
@@ -572,7 +572,7 @@ impl f64 {
     #[must_use = "method returns a new number and does not mutate the original value"]
     #[inline]
     pub fn cos(self) -> f64 {
-        unsafe { intrinsics::cos(self) }
+        intrinsics::cos(self)
     }
 
     /// Computes the tangent of a number (in radians).
