@@ -17,7 +17,6 @@
 
 #![no_std]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
-#![feature(const_extern_fn)]
 #![allow(clippy::missing_safety_doc)]
 #![allow(unused_macros)]
 #![allow(non_camel_case_types)]
